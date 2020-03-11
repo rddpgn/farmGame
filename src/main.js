@@ -7,9 +7,16 @@ window.onload = function() {
 
   let game = new Game(canvas, ctx);
 
-  for(let n = 0; n < 8; n++) {
-    for(let m = 0; m < 8; m++) {    
-      game.createGameObject(Tile, n * 32, m * 32, 32, 3);
+  for(let n = 1; n <= 8; n++) {
+    for(let m = 1; m <= 8; m++) {    
+      game.createGameObject(Tile, n * 50, m * 50, 50, 3);
+    }
+  }
+
+  let btn = document.getElementById('place-wheat');
+  btn.onclick = function() {
+    if (game.selectedGameobject instanceof Tile) {
+      game.selectedGameobject.placeWheat();
     }
   }
 }

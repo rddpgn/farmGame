@@ -15,22 +15,35 @@ export default class Game {
         this.gameObjectStorage[2] = [];
         this.gameObjectStorage[3] = [];
 
-        let updateFunction = this.update.bind(this);
-
+        this.selectedGameobject = null;
+        
         document.onmousemove = this.updateMousePosition.bind(this);
+        document.onclick = this.selectGameObject.bind(this);
+
+        let updateFunction = this.update.bind(this);
         setInterval(updateFunction, 20);
+
+        let _this =  this;
+        this.methods = {
+            createGameObject: _this.createGameObject.bind(_this),
+        }
     }
-    createGameObject(obj, x, y, length, depth = 3, sprite) {
-        let gameObject = new obj(x, y, length, depth, sprite);
+    createGameObject(Obj, x, y, length, depth  = 3) {
+        let gameObject = new Obj(x, y, length, depth, this.methods);
         this.gameObjectStorage[depth].push(gameObject);
         return gameObject;
     }
     update() {
+        this.gameObjectStorage.forEach(function(arr) {
+            arr.forEach(function(obj) {
+                obj.update();
+            })
+        });
         this.render();
     }
     updateMousePosition(e) {
-        this.mouse.x = e.pageX - this.canvas.getBoundingClientRect().x;
-        this.mouse.y = e.pageY - this.canvas.getBoundingClientRect().y;
+        this.mouse.x = e.clientX - this.canvas.getBoundingClientRect().x;
+        this.mouse.y = e.clientY - this.canvas.getBoundingClientRect().y;
         this.isMouseOverGameObject();
     }
     isMouseOverGameObject() {
@@ -38,41 +51,74 @@ export default class Game {
         let my = this.mouse.y;
         this.gameObjectStorage.forEach(function(arr) {
             arr.forEach(function(obj) {
-                if (mx - obj.x < obj.length && mx - obj.x > 0) {
-                    if (my - obj.y < obj.length && my - obj.y > 0) {
-                        obj.onMouseOver();
-                        obj.mouseover = true;
-                    } else {
-                        if (obj.mouseover) {
-                            obj.onMouseLeave();
-                            obj.mouseover = false;
-                        }
-                    }
+                let checkX = mx - obj.x < obj.length && mx - obj.x > 0;
+                let checkY = my - obj.y < obj.length && my - obj.y > 0;
+
+                if (checkX && checkY) {
+                    obj.onMouseOver();
+                    obj.mouseover = true;
                 } else {
-                    if (obj.mouseover) {
-                        obj.onMouseLeave();
-                        obj.mouseover = false;
-                    }
+                    obj.onMouseLeave();
+                    obj.mouseover = false;
                 }
             })
         })
     }
-    render() {
-        this.ctx.clearRect(0,0,800,800);
+    selectGameObject() {
+        let select = false;
+        let wasSelected = null;
         for(let n = 0; n < this.gameObjectStorage.length; n++) {
+            for(let m = 0; m < this.gameObjectStorage[n].length; m++) {
+                let gameObject = this.gameObjectStorage[n][m];
+                if (gameObject.selectable) {
+                    if (gameObject.selected) wasSelected = gameObject;
+                
+                    if (!select) {
+                        if (gameObject.mouseover) {
+                            gameObject.selected = true;
+                            this.selectedGameobject = gameObject;
+                            select = true;
+                        } else {
+                            gameObject.selected = false;
+                        }
+                    } else {
+                        gameObject.selected = false;
+                    }
+                } else {
+                    continue;
+                }                
+            }
+        }
+
+        if (!select) {
+            wasSelected.selected = true;
+        }
+    }
+    render() {
+        this.ctx.clearRect(0,0,400,400);
+        for(let n = this.gameObjectStorage.length-1; n >= 0; n--) {
             for(let m = 0; m < this.gameObjectStorage[n].length; m++) {
                 let gameObject = this.gameObjectStorage[n][m];
                 if (gameObject.sprite) {
                     this.ctx.drawImage(
                         gameObject.sprite.img,
-                        32,
-                        32,
+                        gameObject.length * gameObject.sprite.imageIndex,
+                        0,
                         gameObject.length,
                         gameObject.length,
                         gameObject.x,
                         gameObject.y,
                         gameObject.length,
                         gameObject.length,                        
+                    )
+                }
+                if (gameObject.shape) {
+                    this.ctx.fillStyle = gameObject.shape.color;
+                    this.ctx.fillRect(
+                        gameObject.x + gameObject.shape.x,
+                        gameObject.y + gameObject.shape.y,
+                        gameObject.shape.w,
+                        gameObject.shape.h,
                     )
                 }
             }
