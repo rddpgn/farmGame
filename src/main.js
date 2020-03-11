@@ -1,5 +1,5 @@
 import Game from './engine/Game';
-import Sprite from './engine/Sprite';
+import Tile from './gameObjects/Tile';
 
 window.onload = function() {
   let canvas = document.getElementById('main-canvas');
@@ -8,9 +8,8 @@ window.onload = function() {
   let game = new Game(canvas, ctx);
 
   for(let n = 0; n < 8; n++) {
-    for(let m = 0; m < 8; m++) {
-      let grass = new Sprite(document.getElementById('spr-grass'));
-      game.createGameObject(n * 75, m * 75, 32, grass);
+    for(let m = 0; m < 8; m++) {    
+      game.createGameObject(Tile, n * 32, m * 32, 32, 3);
     }
   }
 }
