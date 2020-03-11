@@ -5,27 +5,36 @@ export default class Game {
         this.canvas = canvas;
         this.ctx = ctx;
         this.gameObjectStorage = [];
+        this.gameObjectStorage[0] = [];
+        this.gameObjectStorage[1] = [];
+        this.gameObjectStorage[2] = [];
+        this.gameObjectStorage[3] = [];
 
-        let renderFuction = this.render.bind(this);
-        setInterval(renderFuction, 20);
+        let updateFunction = this.update.bind(this);
+
+        this.resourceController = new ResourceController();
+        setInterval(updateFunction, 20);
     }
-    createGameObject(x, y, length) {
-        let gameObject = new GameObject(x, y, length);
-        this.gameObjectStorage.push(gameObject);
+    createGameObject(x, y, length, depth = 3) {
+        let gameObject = new GameObject(x, y, length, depth);
+        this.gameObjectStorage[depth].push(gameObject);
         return gameObject;
     }
     update() {
-
+        this.render();
     }
     render() {
-        for(let i = 0; i < this.gameObjectStorage.length; i++) {
-            this.ctx.fillStyle = this.gameObjectStorage[i].color;
-            this.ctx.fillRect(
-                this.gameObjectStorage[i].x,
-                this.gameObjectStorage[i].y,
-                this.gameObjectStorage[i].length,
-                this.gameObjectStorage[i].length
-            )
+        for(let n = 0; n < this.gameObjectStorage.length; n++) {
+            for(let m = 0; m < this.gameObjectStorage[n].length; m++) {
+                let gameObject = this.gameObjectStorage[n][m];
+                this.ctx.fillStyle = gameObject.color;
+                this.ctx.fillRect(
+                    gameObject.x,
+                    gameObject.y,
+                    gameObject.length,
+                    gameObject.length
+                )
+            }
         }
     }
 }
