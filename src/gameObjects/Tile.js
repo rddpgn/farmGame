@@ -39,18 +39,26 @@ export default class Tile extends GameObject {
             this.shape = null;
         }
     }
-    placeWheat() {
+    placeEntity(Entity) {
         if (!this.entity) {
-            this.entity = this.game.createGameObject(Wheat, this.x, this.y - 12, 50, 0);
-            this.barnResource = this.barn.storage['Пшеница'];
-            this.game.logMessage('Вы посадили пшеницу');
+            this.entity = this.game.createGameObject(Entity, this.x, this.y - 12, 50, 0);
+            this.barnResource = this.barn.storage[this.entity.type];
+            this.game.logMessage(this.entity.log.place);
         }
     }
-    getWheat() {
+    removeEntity() {
+        if (this.entity) {
+            this.game.removeGameObject(this.entity);
+            this.entity = null;
+            this.barnResource = null;
+            this.game.logMessage('Ну нахуя сломал то');
+        }
+    }
+    getResource() {
         if (this.entity) {
             if (this.entity.isGrow) {
                 this.barnResource.add(this.entity.reset.bind(this.entity));
-                this.game.logMessage('Вы собрали пшеницу (+1)')
+                this.game.logMessage(this.entity.log.getResource);
             }
         }
     }
@@ -61,19 +69,24 @@ export default class Tile extends GameObject {
                 {
                     type: 'button',
                     text: 'Посадить пшеницу',
-                    handler: _this.placeWheat.bind(_this),
+                    handler: _this.placeEntity.bind(_this, Wheat),
                 }
             ];
         } else {
             return [
                 {
-                    type: 'span',
+                    type: 'div',
                     text: 'Здесь растет пшеница',
                 },
                 {
                     type: 'button',
                     text: 'Собрать пшеницу',
-                    handler: _this.getWheat.bind(_this),
+                    handler: _this.getResource.bind(_this),
+                },
+                {
+                    type: 'button',
+                    text: 'Убрать пшеницу',
+                    handler: _this.removeEntity.bind(_this),
                 }
             ];
         }

@@ -7,6 +7,8 @@ export default class Wheat extends Resource {
         this.growTime = 300;
         this.sprite = new Sprite(document.getElementById('spr-wheat'));
         this.sprite.frames = 0;
+        this.type='Пшеница';
+        this.log.place='Вы посадили пшеницу'
     }
     reset() {
         super.reset();

@@ -7,6 +7,11 @@ export default class Wheat extends GameObject {
         this.growTime = 0;
         this.isGrow = false;
         this.selectable = false;
+        this.type = 'Предмет';
+        this.log = {
+            place: 'Вы посадили предмет',
+            getResource: 'Вы собрали предмет (+1)',
+        }
     }
     reset() {
         this.isGrow = false;
