@@ -4,7 +4,7 @@ import Sprite from '../engine/Sprite';
 export default class Wheat extends Resource {
     constructor(x = 0, y = 0, length = 32, depth) {
         super(x, y, length, depth);
-        this.growTime = 100;
+        this.growTime = 300;
         this.sprite = new Sprite(document.getElementById('spr-wheat'));
         this.sprite.frames = 0;
     }

@@ -1,7 +1,7 @@
 export default class GUI {
-    constructor(gameObjectInterfaceContainer = document.body, storageContainer) {
+    constructor(gameObjectInterfaceContainer = document.body, messageContainer) {
         this.gameObjectInterfaceContainer = gameObjectInterfaceContainer;
-        this.storageContainer = storageContainer;
+        this.messageContainer = messageContainer;
         this.drawGameObjectInterface();
     }
     drawGameObjectInterface(gameObject) {
@@ -33,7 +33,7 @@ export default class GUI {
                 if (arr[i].hasOwnProperty('childNodes')) {
                     let childNodes = this.gameObjectInterfaceParse(arr[i].childNodes);
                     for(let i = 0; i < childNodes.length; i++) {
-                        element.appendChild(childNodes[0]);
+                        element.appendChild(childNodes[i]);
                     }
                 }
                 elements.push(element);
@@ -42,32 +42,12 @@ export default class GUI {
         }
         return 0;
     }
-    drawStorageInterface(storage) {
-        this.storageContainer.innerHTML = '';
-        let elements = this.storageParse(storage);
-
-        for(let i = 0; i < elements.length; i++) {
-            this.storageContainer.appendChild(elements[i]);
-        }
-    }
-    storageParse(storage) {
-        let elements = [];
-
-        for(let res in storage) {
-            let div = document.createElement('div');
-            let name = document.createElement('span');
-            name.innerHTML = `${storage[res].name}: ${storage[res].quantity}/${storage[res].maxQuantity}`;
-            div.appendChild(name);
-
-            if (storage[res].name != 'Золото') {
-                let button = document.createElement('button');
-                button.innerHTML = `Продать ${storage[res].name}`;
-                div.appendChild(button);
-            }
-            
-            elements.push(div);
-        }
-        return elements;
+    logMessage(message) {
+        let _this = this;
+        this.messageContainer.innerHTML = message;
+        setTimeout(function() {
+            _this.messageContainer.innerHTML = '';
+        }, 2000);
     }
 }
 /*

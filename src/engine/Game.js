@@ -30,6 +30,7 @@ export default class Game {
         this.methods = {
             createGameObject: _this.createGameObject.bind(_this),
             updateInterface: _this.gameObjectInterfaceUpdate.bind(_this),
+            logMessage: _this.gui.logMessage.bind(_this.gui),
         }
         return this.methods;
     }
