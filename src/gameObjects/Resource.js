@@ -8,6 +8,10 @@ export default class Wheat extends GameObject {
         this.isGrow = false;
         this.selectable = false;
     }
+    reset() {
+        this.isGrow = false;
+        this.growCounter = 0;
+    }
     update() {
         if (!this.isGrow) {
             this.growCounter++;

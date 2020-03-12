@@ -10,6 +10,7 @@ export default class GameObject {
         this.selected = false;
         this.game = game;
         this.selectable = true;
+        this.interface = '';
     }
     update() {
         if (this.sprite) {
@@ -22,4 +23,5 @@ export default class GameObject {
     }
     onMouseClick() {
     }
+    getInterface() {};
 }

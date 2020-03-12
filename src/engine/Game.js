@@ -1,7 +1,6 @@
-import GameObject from './GameObject';
-
 export default class Game {
-    constructor(canvas, ctx) {
+    constructor(canvas, ctx, gui) {
+        let _this =  this;
         this.canvas = canvas;
         this.ctx = ctx;
         this.mouse = {
@@ -16,17 +15,23 @@ export default class Game {
         this.gameObjectStorage[3] = [];
 
         this.selectedGameobject = null;
-        
+        this.gui = gui;
+
         document.onmousemove = this.updateMousePosition.bind(this);
-        document.onclick = this.selectGameObject.bind(this);
+        document.onclick = function() {
+            _this.selectGameObject.call(_this);
+            _this.gameObjectInterfaceUpdate.call(_this);
+        }
 
         let updateFunction = this.update.bind(this);
         setInterval(updateFunction, 20);
 
-        let _this =  this;
+        
         this.methods = {
             createGameObject: _this.createGameObject.bind(_this),
+            updateInterface: _this.gameObjectInterfaceUpdate.bind(_this),
         }
+        return this.methods;
     }
     createGameObject(Obj, x, y, length, depth  = 3) {
         let gameObject = new Obj(x, y, length, depth, this.methods);
@@ -90,9 +95,12 @@ export default class Game {
             }
         }
 
-        if (!select) {
+        if (!select && wasSelected) {
             wasSelected.selected = true;
         }
+    }
+    gameObjectInterfaceUpdate() {
+        this.gui.drawGameObjectInterface(this.selectedGameobject);
     }
     render() {
         this.ctx.clearRect(0,0,400,400);

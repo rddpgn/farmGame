@@ -9,6 +9,9 @@ export default class Tile extends GameObject {
         this.sprite.frames = 2;
         this.sprite.maxCounter = 30 + Math.random() * 30;
         this.entity = null;
+        this.type = 'tile';
+        this.barn = null;
+        this.barnResource = null;
     }
     onMouseOver() {
         this.shape = {
@@ -39,7 +42,38 @@ export default class Tile extends GameObject {
     placeWheat() {
         if (!this.entity) {
             this.entity = this.game.createGameObject(Wheat, this.x, this.y - 12, 50, 0);
-            console.log(this.entity.depth);
+            this.barnResource = this.barn.storage['Пшеница'];
+        }
+    }
+    getWheat() {
+        if (this.entity) {
+            if (this.entity.isGrow) {
+                this.barnResource.add(this.entity.reset.bind(this.entity));
+            }
+        }
+    }
+    getInterface() {
+        let _this = this;
+        if (!this.entity) {
+            return [
+                {
+                    type: 'button',
+                    text: 'Посадить пшеницу',
+                    handler: _this.placeWheat.bind(_this),
+                }
+            ];
+        } else {
+            return [
+                {
+                    type: 'h2',
+                    text: 'Здесь растет пшеница'
+                },
+                {
+                    type: 'button',
+                    text: 'Собрать пшеницу',
+                    handler: _this.getWheat.bind(_this),
+                }
+            ];
         }
     }
 }
