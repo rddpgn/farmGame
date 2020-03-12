@@ -66,7 +66,13 @@ export default class Tile extends GameObject {
             return [
                 {
                     type: 'h2',
-                    text: 'Здесь растет пшеница'
+                    text: 'Здесь растет пшеница',
+                    childNodes: [
+                        {
+                            type: 'h3',
+                            text: 'Ого рекурсвия',
+                        }
+                    ]
                 },
                 {
                     type: 'button',

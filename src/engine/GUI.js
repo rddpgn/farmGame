@@ -30,6 +30,12 @@ export default class GUI {
                         arr[i].handler();
                     }
                 }
+                if (arr[i].hasOwnProperty('childNodes')) {
+                    let childNodes = this.gameObjectInterfaceParse(arr[i].childNodes);
+                    for(let i = 0; i < childNodes.length; i++) {
+                        element.appendChild(childNodes[0]);
+                    }
+                }
                 elements.push(element);
             }
             return elements;
