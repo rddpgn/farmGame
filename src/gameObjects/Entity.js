@@ -1,24 +1,34 @@
 import GameObject from '../engine/GameObject';
 
-export default class Wheat extends GameObject {
-    constructor(x = 0, y = 0, length = 32, depth) {
-        super(x, y, length, depth);
-        this.growCounter = 0;
-        this.growTime = 0;
-        this.isGrow = false;
+export default class Entity extends GameObject {
+    constructor(x, y, length, depth, game) {
+        super(x, y, length, depth, game);
+        this.name = 'name';
+        this.resource = 'resource';
+        this.initialCost = 0;
         this.selectable = false;
-        this.type = 'Предмет';
-        this.log = {
-            place: 'Вы посадили предмет',
-            getResource: 'Вы собрали предмет (+1)',
+
+        this.isFeed = true;
+        this.isGrew = false;
+
+        this.growTime = 0;
+        this.growCounter = 0;
+    }
+    static getEntityInfo() {
+        return {
+            name: 'Предмет',
+            resource: 'Ресурс',
+            initialCost: 0,
         }
     }
     reset() {
         this.isGrow = false;
         this.growCounter = 0;
+        this.shape = null;
     }
     update() {
-        if (!this.isGrow) {
+        super.update();
+        if (!this.isGrow && this.isFeed) {
             this.growCounter++;
             
             this.shape = {

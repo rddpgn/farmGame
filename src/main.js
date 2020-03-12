@@ -9,12 +9,12 @@ window.onload = function() {
 
   let gui = new GUI(document.getElementById('gameObject-gui'), document.getElementById('message-gui'));
   let game = new Game(canvas, ctx, gui);
-  let barn = game.createGameObject(Storage, 0, 0, 100, 0);
+  let barn = game.createGameObject(Storage, 500, 50, 100, 0);
 
-  barn.addResource('Пшеница', 0, 3, true);
+  barn.addResource('Пшеница', 0, 25, true, 0, 2);
   barn.addResource('Молоко', 0, 25, true);
-  barn.addResource('Яйца', 0, 25, true);
-  barn.addResource('Золото', 0, 25, false);
+  barn.addResource('Яйца', 0, 25, true, 10, 5);
+  barn.addResource('Золото', 40, 100, false);
 
   for(let n = 1; n <= 8; n++) {
     for(let m = 1; m <= 8; m++) {    

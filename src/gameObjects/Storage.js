@@ -7,7 +7,7 @@ export default class Storage extends GameObject {
         this.storage = { };
         this.sprite = new Sprite(document.getElementById('spr-barn'));
     }
-    addResource(name, quantity, maxQuantity, tradable) {
+    addResource(name, quantity, maxQuantity, tradable, costBuy, costSell) {
         let _this = this;
         if (!this.storage.hasOwnProperty(name)) {
             this.storage[name] = {
@@ -15,10 +15,16 @@ export default class Storage extends GameObject {
                 quantity: quantity,
                 maxQuantity: maxQuantity,
                 tradable: tradable,
-                add: function(callback) {
-                    if (this.quantity < maxQuantity) {
-                        this.quantity++;
-                        callback();
+                costBuy: costBuy,
+                costSell: costSell,
+                add: function(n = 1) {
+                    if (this.quantity <= maxQuantity - n) {
+                        this.quantity += n;
+                    }
+                },
+                remove: function(n = 1) {
+                    if (this.quantity >= 0 + n) {
+                        this.quantity -= n;
                     }
                 }
             };
@@ -26,7 +32,10 @@ export default class Storage extends GameObject {
         return this.storage[name];
     }
     sellItem(item) {
-
+        if (this.storage[item].quantity > 0) {
+            this.storage[item].remove();
+            this.storage['Золото'].add(this.storage[item].costSell);
+        }
     }
     makeInterface(storage) {
         let elements = [];
@@ -48,7 +57,7 @@ export default class Storage extends GameObject {
                 element.childNodes.push( {
                     type: 'button',
                     text: `Продать ${item}`,
-                    handler: _this.sellItem(item),
+                    handler: _this.sellItem.bind(_this, item),
                 });
             }
             elements.push(element);

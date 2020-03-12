@@ -3,6 +3,7 @@ export default class GUI {
         this.gameObjectInterfaceContainer = gameObjectInterfaceContainer;
         this.messageContainer = messageContainer;
         this.drawGameObjectInterface();
+        this.timer = setTimeout(0);
     }
     drawGameObjectInterface(gameObject) {
         this.gameObjectInterfaceContainer.innerHTML = '';
@@ -44,10 +45,11 @@ export default class GUI {
     }
     logMessage(message) {
         let _this = this;
+        clearTimeout(this.timer);
         this.messageContainer.innerHTML = message;
-        setTimeout(function() {
+        this.timer = setTimeout(function() {
             _this.messageContainer.innerHTML = '';
-        }, 2000);
+        }, 4000);
     }
 }
 /*
