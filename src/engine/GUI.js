@@ -48,14 +48,17 @@ export default class GUI {
         let elements = [];
 
         for(let res in storage) {
+            let div = document.createElement('div');
             let name = document.createElement('span');
             name.innerHTML = `${storage[res].name}: ${storage[res].quantity}/${storage[res].maxQuantity}`;
-            let button = document.createElement('button');
-            button.innerHTML = `Продать ${storage[res].name}`;
-
-            let div = document.createElement('div');
             div.appendChild(name);
-            div.appendChild(button);
+
+            if (storage[res].name != 'Золото') {
+                let button = document.createElement('button');
+                button.innerHTML = `Продать ${storage[res].name}`;
+                div.appendChild(button);
+            }
+            
             elements.push(div);
         }
         return elements;
