@@ -1,28 +1,24 @@
 import Entity from './Entity';
 import Sprite from '../engine/Sprite';
 
-export default class Chicken extends Entity {
+export default class Cow extends Entity {
     constructor(x = 0, y = 0, length = 32, depth, game) {
         super(x, y, length, depth, game);
 
-        this.name = 'Курица';
-        this.resource = 'Яйца';
+        this.name = 'Корова';
+        this.resource = 'Молоко';
+        this.resourceAmount = 4;
 
-        if (Math.random() > 0.3) {
-            this.sprite = new Sprite(document.getElementById('spr-chicken-0'));
-            this.sprite.frames = 2;
-        } else {
-            this.sprite = new Sprite(document.getElementById('spr-chicken-1'));
-            this.sprite.frames = 7;   
-        }
-
+        this.sprite = new Sprite(document.getElementById('spr-cow'));
+        this.sprite.frames = 2;
         this.sprite.maxCounter = 20 + Math.random() * 20;
+
         this.growTime = 600;
         this.isFeed = false;
-        this.foodAmount = 1;
+        this.foodAmount = 2;
     }
     static getEntityCost() {
-        return 10;
+        return 40;
     }
     reset() {
         super.reset();
@@ -33,6 +29,6 @@ export default class Chicken extends Entity {
     }
     growCompleted() {
         super.growCompleted();
-        console.log('Chicken grew');
+        console.log('Cow grew');
     }
 }

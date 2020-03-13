@@ -3,23 +3,23 @@ import GameObject from '../engine/GameObject';
 export default class Entity extends GameObject {
     constructor(x, y, length, depth, game) {
         super(x, y, length, depth, game);
-        this.name = 'name';
-        this.resource = 'resource';
-        this.initialCost = 0;
         this.selectable = false;
 
+        this.name = 'name';
+        this.cost = 0;
+        this.resource = 'resource';
+        this.resourceAmount = 1;
+        
         this.isFeed = true;
         this.isGrew = false;
+        this.food = 'Пшеница';
+        this.foodAmount = 0;
 
         this.growTime = 0;
         this.growCounter = 0;
     }
-    static getEntityInfo() {
-        return {
-            name: 'Предмет',
-            resource: 'Ресурс',
-            initialCost: 0,
-        }
+    static getEntityCost() {
+        return 0;
     }
     reset() {
         this.isGrow = false;

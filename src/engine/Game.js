@@ -48,7 +48,6 @@ export default class Game {
                 }
             }
         }
-        console.log(this.gameObjectStorage);
     }
     update() {
         this.gameObjectStorage.forEach(function(arr) {

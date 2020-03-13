@@ -2,6 +2,7 @@ import GameObject from '../engine/GameObject';
 import Sprite from '../engine/Sprite';
 import Wheat from './Wheat';
 import Chicken from './Chicken';
+import Cow from './Cow';
 
 export default class Tile extends GameObject {
     constructor(x, y, length, depth, game) {
@@ -12,7 +13,6 @@ export default class Tile extends GameObject {
         this.entity = null;
         this.type = 'tile';
         this.barn = null;
-        this.barnResource = null;
     }
     onMouseOver() {
         this.shape = {
@@ -41,42 +41,56 @@ export default class Tile extends GameObject {
         }
     }
     placeEntity(newEntity) {
-        let info = newEntity.getEntityInfo();
+        let cost = newEntity.getEntityCost();
         if (!this.entity) {
-            if (this.barn.storage['Золото'].quantity - info.initialCost >= 0) {
+            if (this.barn.removeItem('Золото', cost)) {
                 this.entity = this.game.createGameObject(newEntity, this.x, this.y - 12, 50, 0);
-                this.barn.storage['Золото'].remove(this.entity.initialCost);
-                this.game.logMessage(`Вы пострили ${this.entity.name}`);
+                this.entity.cost = cost;
+                this.game.logMessage(`Вы построили ${this.entity.name}`);
+            } else {
+                this.game.logMessage(`Недостаточно денег для постройки`)
             }
         }
     }
     feedEntity() {
         if (this.entity) {
             if (!this.entity.isFeed) {
-                if (this.barn.storage['Пшеница'].quantity > 0) {
+                if (this.barn.removeItem(this.entity.food, this.entity.foodAmount)) {
                     this.entity.isFeed = true;
-                    this.barn.storage['Пшеница'].quantity--;
-                    this.game.logMessage('Вы покормили курицу');
+                    this.game.logMessage(`Вы покормили ${this.entity.name} 
+                                                     (-${this.entity.foodAmount} 
+                                                       ${this.entity.food})`);
                 } else {
-                    this.game.logMessage('Слишком мало пшеницы, чтобы покормить курицу');
+                    this.game.logMessage(`Слишком мало ${this.entity.food} чтобы
+                                          покормить ${this.entity.name}`);
                 }
             }
         }
     }
     removeEntity() {
         if (this.entity) {
-            this.game.removeGameObject(this.entity);
-            this.entity = null;
-            this.barnResource = null;
-            this.game.logMessage('Ну нахуя сломал то');
+            let cost = Math.floor(this.entity.cost/2);
+            if (this.barn.addItem('Золото'), cost) {
+                this.game.logMessage(`Вы избавились от ${this.entity.name} за +${cost}`);
+                this.game.removeGameObject(this.entity);
+                this.entity = null;
+            } else {
+                this.game.logMessage('Недотаточно места на складе');
+            }
         }
     }
     getResource() {
         if (this.entity) {
             if (this.entity.isGrow) {
-                this.barn.storage[this.entity.resource].add();
-                this.entity.reset();
-                this.game.logMessage(this.entity.log.getResource);
+                if (this.barn.addItem(this.entity.resource, this.entity.resourceAmount)) {
+                    this.entity.reset();
+                    this.game.logMessage(`Вы собрали ${this.entity.resource} 
+                                                    +${this.entity.resourceAmount}`);
+                } else {
+                    this.game.logMessage('Склад заполнен, невозможно забрать ресурсы')
+                }
+            } else {
+                this.game.logMessage(`${this.entity.name} еще не произвело ${this.entity.resource}`);
             }
         }
     }
@@ -93,6 +107,11 @@ export default class Tile extends GameObject {
                     type: 'button',
                     text: 'Завести курицу',
                     handler: _this.placeEntity.bind(_this, Chicken),
+                },
+                {
+                    type: 'button',
+                    text: 'Корову',
+                    handler: _this.placeEntity.bind(_this, Cow),
                 }
             ];
         } else {
@@ -132,6 +151,28 @@ export default class Tile extends GameObject {
                     {
                         type: 'button',
                         text: 'Продать курицу',
+                        handler: _this.removeEntity.bind(_this),
+                    }
+                ];
+            } else if (this.entity.name === 'Корова') {
+                return [
+                    {
+                        type: 'div',
+                        text: 'Здесь живет Корова',
+                    },
+                    {
+                        type: 'button',
+                        text: 'Собрать молоко',
+                        handler: _this.getResource.bind(_this),
+                    },
+                    {
+                        type: 'button',
+                        text: 'Покормить корову',
+                        handler: _this.feedEntity.bind(_this),
+                    },
+                    {
+                        type: 'button',
+                        text: 'Продать корову',
                         handler: _this.removeEntity.bind(_this),
                     }
                 ];

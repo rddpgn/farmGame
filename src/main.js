@@ -11,9 +11,9 @@ window.onload = function() {
   let game = new Game(canvas, ctx, gui);
   let barn = game.createGameObject(Storage, 500, 50, 100, 0);
 
-  barn.addResource('Пшеница', 0, 25, true, 0, 2);
-  barn.addResource('Молоко', 0, 25, true);
-  barn.addResource('Яйца', 0, 25, true, 10, 5);
+  barn.addResource('Пшеница', 0, 25, true, 2);
+  barn.addResource('Молоко', 0, 25, true, 10);
+  barn.addResource('Яйца', 0, 25, true, 5);
   barn.addResource('Золото', 40, 100, false);
 
   for(let n = 1; n <= 8; n++) {

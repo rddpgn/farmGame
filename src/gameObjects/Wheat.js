@@ -4,25 +4,15 @@ import Sprite from '../engine/Sprite';
 export default class Wheat extends Entity {
     constructor(x = 0, y = 0, length = 32, depth, game) {
         super(x, y, length, depth, game);
-        
         this.name = 'Пшеничное поле';
         this.resource = 'Пшеница';
-        this.initialCost = 0;
 
         this.growTime = 300;
         this.sprite = new Sprite(document.getElementById('spr-wheat'));
         this.sprite.frames = 0;
-        this.log = {
-            place: 'Вы посадили пшеницу',
-            getResource: 'Вы собрали пшеницу (+1)',
-        }
     }
-    static getEntityInfo() {
-        return {
-            name: 'Пшеничное поле',
-            resource: 'Пшеница',
-            initialCost: 0,
-        }
+    static getEntityCost() {
+        return 0;
     }
     reset() {
         super.reset();
