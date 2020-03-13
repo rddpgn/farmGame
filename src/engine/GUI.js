@@ -26,6 +26,11 @@ export default class GUI {
             for(let i = 0; i < arr.length; i++) {
                 let element = document.createElement(arr[i].type);
                 element.innerHTML = arr[i].text;
+
+                if (arr[i].hasOwnProperty('class')) {
+                    element.className = arr[i].class;
+                }
+
                 if (arr[i].type === 'button') {
                     element.onclick = function() {
                         arr[i].handler();

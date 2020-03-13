@@ -48,6 +48,7 @@ export default class Storage extends GameObject {
             let element = {
                 type: 'div',
                 text: '',
+                class: 'horizontal-container',
                 childNodes: [
                     {
                         type: 'span',

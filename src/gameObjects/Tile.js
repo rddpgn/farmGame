@@ -125,6 +125,10 @@ export default class Tile extends GameObject {
         if (!this.entity) {
             return [
                 {
+                    type: 'div',
+                    text: 'Здесь можно что-то построить',
+                },
+                {
                     type: 'button',
                     text: `Посадить пшеницу (-${Wheat.getEntityCost()} Золото)`,
                     handler: _this.placeEntity.bind(_this, Wheat),
