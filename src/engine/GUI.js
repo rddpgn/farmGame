@@ -27,8 +27,8 @@ export default class GUI {
                 let element = document.createElement(arr[i].type);
                 element.innerHTML = arr[i].text;
 
-                if (arr[i].hasOwnProperty('class')) {
-                    element.className = arr[i].class;
+                if (arr[i].hasOwnProperty('className')) {
+                    element.className = arr[i].className;
                 }
 
                 if (arr[i].type === 'button') {

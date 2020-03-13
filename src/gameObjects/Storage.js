@@ -22,7 +22,7 @@ export default class Storage extends GameObject {
     }
     addItem(item, amount = 1) {
         let res = this.storage[item];
-        if (res.quantity <= res.maxQuantity + amount) {
+        if (res.quantity + amount <= res.maxQuantity) {
             res.quantity+= amount;
             return true;
         } 
@@ -38,20 +38,34 @@ export default class Storage extends GameObject {
     }
     sellItem(item, cost) {
         if (this.removeItem(item)) {
-            this.addItem('Золото', cost);
+            if (this.addItem('Золото', cost)) {
+                this.game.logMessage(`Вы продали ${item} за ${cost} золота`);
+            } else {
+                this.addItem(item);
+                this.game.logMessage(`Недостаточно места на складе для золота`);
+            }
+        } else {
+            this.game.logMessage('Недостаточно ресурсов для продажи')
         }
     }
     makeInterface(storage) {
         let elements = [];
         let _this = this;
+
+        elements.push({
+            type: 'div',
+            text: 'Амбар:'
+        });
+
         for(let item in storage) {
             let element = {
                 type: 'div',
                 text: '',
-                class: 'horizontal-container',
+                className: 'table-row',
                 childNodes: [
                     {
-                        type: 'span',
+                        type: 'div',
+                        className: 'text-gui',
                         text: `${item}: 
                                ${_this.storage[item].quantity}/
                                ${_this.storage[item].maxQuantity}`,

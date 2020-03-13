@@ -15,7 +15,7 @@ window.onload = function() {
   barn.addResource('Пшеница', 0, 25, true, 2);
   barn.addResource('Молоко', 0, 25, true, 10);
   barn.addResource('Яйца', 0, 25, true, 5);
-  barn.addResource('Золото', 40, 100, false);
+  barn.addResource('Золото', 100, 100, false);
 
   for(let n = 1; n <= 8; n++) {
     for(let m = 1; m <= 8; m++) {    

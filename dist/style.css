@@ -30,7 +30,6 @@ body {
 .horizontal-container {
     display: flex;
     flex-direction: row;
-    justify-items: center;
 }
 
 #gameObject-gui {
@@ -49,12 +48,25 @@ button {
     background-color: rgb(32,32,32);
     color: white;
     border: 2px solid black;
+    font-family: monospace;
 }
 
 button:hover {
     background-color: rgb(48,48,48);
 }
 
-span {
-    flex: 1 0 0;
+.table-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.table-row :first-child() {
+    flex: 1 1 0;
+}
+
+.text-gui {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem;
 }

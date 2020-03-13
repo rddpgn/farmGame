@@ -99,6 +99,7 @@ export default class Tile extends GameObject {
         let arr = [];
         arr.push({
             type: 'div',
+            className: 'text-gui',
             text: `Здесь живет ${entity.name}`,
         });
         arr.push({
@@ -126,6 +127,7 @@ export default class Tile extends GameObject {
             return [
                 {
                     type: 'div',
+                    className: 'text-gui',
                     text: 'Здесь можно что-то построить',
                 },
                 {
