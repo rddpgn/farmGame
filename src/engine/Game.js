@@ -14,7 +14,7 @@ export default class Game {
 
         this.gameObjectStorage = [];
         for(let i = 0; i <= 3; i++) {
-            this.gameObjectStorage[i] = [];
+            this.gameObjectStorage[i] = new Set();
         }
         this.storageHoles = [];
 
@@ -39,29 +39,16 @@ export default class Game {
     }
     createGameObject(Obj, x, y, length, depth  = 3) {
         let gameObject = new Obj(x, y, length, depth, this.methods);
-        this.gameObjectStorage[depth].push(gameObject);
+        this.gameObjectStorage[depth].add(gameObject);
         return gameObject;
     }
     removeGameObject(remObj) {
-        for(let n = 0; n < this.gameObjectStorage.length; n++) {
-            for (let m = 0; m < this.gameObjectStorage[n].length; m++) {
-                if (this.gameObjectStorage[n][m] === remObj) {
-                    this.gameObjectStorage[n][m] = null;
-                    this.storageHoles.push({
-                        depth: n,
-                        place: m,
-                    })
-                    return;
-                }
-            }
-        }
+        this.gameObjectStorage[remObj.depth].delete(remObj);
     }
     update() {
         for(let n = 0; n < this.gameObjectStorage.length; n++) {
-            for (let m = 0; m < this.gameObjectStorage[n].length; m++) {
-                if (this.gameObjectStorage[n][m]) {
-                    this.gameObjectStorage[n][m].update();
-                }
+            for(let obj of this.gameObjectStorage[n]) {
+                obj.update();
             }
         }
         this.render();
@@ -74,8 +61,8 @@ export default class Game {
     isMouseOverGameObject() {
         let mx = this.mouse.x;
         let my = this.mouse.y;
-        this.gameObjectStorage.forEach(function(arr) {
-            arr.forEach(function(obj) {
+        this.gameObjectStorage.forEach(function(set) {
+            for(let obj of set) {
                 if (obj) {
                     let checkX = mx - obj.x < obj.length && mx - obj.x > 0;
                     let checkY = my - obj.y < obj.length && my - obj.y > 0;
@@ -88,15 +75,14 @@ export default class Game {
                         obj.mouseover = false;
                     }
                 }
-            })
+            }
         })
     }
     selectGameObject() {
         let select = false;
         let wasSelected = null;
         for(let n = 0; n < this.gameObjectStorage.length; n++) {
-            for(let m = 0; m < this.gameObjectStorage[n].length; m++) {
-                let gameObject = this.gameObjectStorage[n][m];
+            for(let gameObject of this.gameObjectStorage[n]) {
                 if (gameObject) {
                     if (gameObject.selectable) {
                         if (gameObject.selected) wasSelected = gameObject;
@@ -127,8 +113,7 @@ export default class Game {
     render() {
         this.ctx.clearRect(0,0,this.canvasW,this.canvasH);
         for(let n = this.gameObjectStorage.length-1; n >= 0; n--) {
-            for(let m = 0; m < this.gameObjectStorage[n].length; m++) {
-                let gameObject = this.gameObjectStorage[n][m];
+            for(let gameObject of this.gameObjectStorage[n]) {
                 if (gameObject) {
                     if (gameObject.sprite) {
                         this.ctx.drawImage(
