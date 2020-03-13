@@ -1,18 +1,22 @@
+import GameObject from "./GameObject";
+
 export default class Game {
-    constructor(canvas, ctx, gui) {
+    constructor(canvas, ctx, canvasW, canvasH, gui) {
         let _this =  this;
         this.canvas = canvas;
         this.ctx = ctx;
+        this.canvasW = canvasW;
+        this.canvasH = canvasH;
         this.mouse = {
             x: 0,
             y: 0,
         }
 
         this.gameObjectStorage = [];
-        this.gameObjectStorage[0] = [];
-        this.gameObjectStorage[1] = [];
-        this.gameObjectStorage[2] = [];
-        this.gameObjectStorage[3] = [];
+        for(let i = 0; i <= 3; i++) {
+            this.gameObjectStorage[i] = [];
+        }
+        this.storageHoles = [];
 
         this.selectedGameobject = null;
         this.gui = gui;
@@ -25,12 +29,10 @@ export default class Game {
 
         let updateFunction = this.update.bind(this);
         setInterval(updateFunction, 20);
-
         
         this.methods = {
             createGameObject: _this.createGameObject.bind(_this),
             removeGameObject: _this.removeGameObject.bind(_this),
-            updateInterface: _this.gameObjectInterfaceUpdate.bind(_this),
             logMessage: _this.gui.logMessage.bind(_this.gui),
         }
         return this.methods;
@@ -45,18 +47,23 @@ export default class Game {
             for (let m = 0; m < this.gameObjectStorage[n].length; m++) {
                 if (this.gameObjectStorage[n][m] === remObj) {
                     this.gameObjectStorage[n][m] = null;
+                    this.storageHoles.push({
+                        depth: n,
+                        place: m,
+                    })
+                    return;
                 }
             }
         }
     }
     update() {
-        this.gameObjectStorage.forEach(function(arr) {
-            arr.forEach(function(obj) {
-                if (obj) {
-                    obj.update();
+        for(let n = 0; n < this.gameObjectStorage.length; n++) {
+            for (let m = 0; m < this.gameObjectStorage[n].length; m++) {
+                if (this.gameObjectStorage[n][m]) {
+                    this.gameObjectStorage[n][m].update();
                 }
-            })
-        });
+            }
+        }
         this.render();
     }
     updateMousePosition(e) {
@@ -105,9 +112,7 @@ export default class Game {
                         } else {
                             gameObject.selected = false;
                         }
-                    } else {
-                        continue;
-                    }
+                    } 
                 }
             }
         }
@@ -120,7 +125,7 @@ export default class Game {
         this.gui.drawGameObjectInterface(this.selectedGameobject);
     }
     render() {
-        this.ctx.clearRect(0,0,400,400);
+        this.ctx.clearRect(0,0,this.canvasW,this.canvasH);
         for(let n = this.gameObjectStorage.length-1; n >= 0; n--) {
             for(let m = 0; m < this.gameObjectStorage[n].length; m++) {
                 let gameObject = this.gameObjectStorage[n][m];

@@ -70,7 +70,7 @@ export default class Tile extends GameObject {
     removeEntity() {
         if (this.entity) {
             let cost = Math.floor(this.entity.cost/2);
-            if (this.barn.addItem('Золото'), cost) {
+            if (this.barn.addItem('Золото', cost)) {
                 this.game.logMessage(`Вы избавились от ${this.entity.name} за +${cost}`);
                 this.game.removeGameObject(this.entity);
                 this.entity = null;
@@ -94,89 +94,54 @@ export default class Tile extends GameObject {
             }
         }
     }
+    makeInterface(entity) {
+        let _this = this;
+        let arr = [];
+        arr.push({
+            type: 'div',
+            text: `Здесь живет ${entity.name}`,
+        });
+        arr.push({
+            type: 'button',
+            text: `Собрать ресурс ${this.entity.resource} (+ ${this.entity.resourceAmount} ${this.entity.resource})`,
+            handler: _this.getResource.bind(_this),  
+        });
+        if (entity.foodAmount > 0) {
+            arr.push({
+                type: 'button',
+                text: `Покормить ${this.entity.name} (- ${this.entity.foodAmount} ${this.entity.food})`,
+                handler: _this.feedEntity.bind(_this),
+            }) 
+        };
+        arr.push({
+            type: 'button',
+            text: `Продать ${this.entity.name} (+ ${Math.floor(this.entity.cost/2)} Золото)`,
+            handler: _this.removeEntity.bind(_this),
+        })
+        return arr;
+    }
     getInterface() {
         let _this = this;
         if (!this.entity) {
             return [
                 {
                     type: 'button',
-                    text: 'Посадить пшеницу',
+                    text: `Посадить пшеницу (-${Wheat.getEntityCost()} Золото)`,
                     handler: _this.placeEntity.bind(_this, Wheat),
                 },
                 {
                     type: 'button',
-                    text: 'Завести курицу',
+                    text: `Завести курицу (-${Chicken.getEntityCost()} Золото)`,
                     handler: _this.placeEntity.bind(_this, Chicken),
                 },
                 {
                     type: 'button',
-                    text: 'Корову',
+                    text: `Завести корову (-${Cow.getEntityCost()} Золото)`,
                     handler: _this.placeEntity.bind(_this, Cow),
                 }
             ];
         } else {
-            if (this.entity.resource === 'Пшеница') {
-                return [
-                    {
-                        type: 'div',
-                        text: 'Здесь растет пшеница',
-                    },
-                    {
-                        type: 'button',
-                        text: 'Собрать пшеницу',
-                        handler: _this.getResource.bind(_this),
-                    },
-                    {
-                        type: 'button',
-                        text: 'Убрать пшеницу',
-                        handler: _this.removeEntity.bind(_this),
-                    }
-                ];
-            } else if (this.entity.resource === 'Яйца') {
-                return [
-                    {
-                        type: 'div',
-                        text: 'Здесь живет курица',
-                    },
-                    {
-                        type: 'button',
-                        text: 'Собрать яйца',
-                        handler: _this.getResource.bind(_this),
-                    },
-                    {
-                        type: 'button',
-                        text: 'Покормить курицу',
-                        handler: _this.feedEntity.bind(_this),
-                    },
-                    {
-                        type: 'button',
-                        text: 'Продать курицу',
-                        handler: _this.removeEntity.bind(_this),
-                    }
-                ];
-            } else if (this.entity.name === 'Корова') {
-                return [
-                    {
-                        type: 'div',
-                        text: 'Здесь живет Корова',
-                    },
-                    {
-                        type: 'button',
-                        text: 'Собрать молоко',
-                        handler: _this.getResource.bind(_this),
-                    },
-                    {
-                        type: 'button',
-                        text: 'Покормить корову',
-                        handler: _this.feedEntity.bind(_this),
-                    },
-                    {
-                        type: 'button',
-                        text: 'Продать корову',
-                        handler: _this.removeEntity.bind(_this),
-                    }
-                ];
-            }
+            return this.makeInterface(this.entity);
         }
     }
 }

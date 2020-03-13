@@ -8,7 +8,8 @@ window.onload = function() {
   let ctx = canvas.getContext('2d');
 
   let gui = new GUI(document.getElementById('gameObject-gui'), document.getElementById('message-gui'));
-  let game = new Game(canvas, ctx, gui);
+  let game = new Game(canvas, ctx, 650, 500, gui);
+
   let barn = game.createGameObject(Storage, 500, 50, 100, 0);
 
   barn.addResource('Пшеница', 0, 25, true, 2);
