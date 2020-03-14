@@ -7,7 +7,7 @@ export default class Wheat extends Entity {
         this.name = 'Пшеничное поле';
         this.resource = 'Пшеница';
 
-        this.growTime = 300;
+        this.growTime = 500;
         this.sprite = new Sprite(document.getElementById('spr-wheat'));
         this.sprite.frames = 0;
     }

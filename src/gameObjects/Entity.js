@@ -20,6 +20,8 @@ export default class Entity extends GameObject {
         this.food = 'Пшеница';      //Ресурс, которым нужно кормить сущность
         this.foodAmount = 0;        //Сколько нужно ресурса, чтобы прокормить
                                     //Если 0, то в кормлении не нуждается
+        this.foodCycles = 0;        //На сколько единиц производства ресурсов хватает еды
+        this.foodCyclesCounter = 0; 
 
         this.growTime = 0;          //Сколько игровых тиков должна расти сущность
         this.growCounter = 0;
@@ -32,7 +34,6 @@ export default class Entity extends GameObject {
         this.isGrow = false;
         this.growCounter = 0;
         this.shape = null;
-        this.isFeed = false;
     }
     update() {
         super.update();
@@ -55,5 +56,11 @@ export default class Entity extends GameObject {
     }
     growCompleted() {
         this.shape.color = 'green';
+        this.foodCyclesCounter++; 
+
+        if (this.foodCyclesCounter === this.foodCycles) {
+            this.foodCyclesCounter = 0;
+            this.isFeed = false;
+        }
     }
 }

@@ -13,6 +13,8 @@ export default class Cow extends Entity {
         this.sprite.frames = 2;
         this.sprite.maxCounter = 20 + Math.random() * 20;
 
+        this.foodCycles = 1;
+
         this.growTime = 800;
         this.isFeed = false;
         this.foodAmount = 2;
