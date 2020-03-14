@@ -1,3 +1,9 @@
+/*
+    Здесь хранятся все ресуры, которые мы собираем в течении игры
+    Ограничение по размеру сделано специально, чтобы в дальнейшем можно было 
+    прикрутить кнопу прокачать склад, но мне уже лень
+*/
+
 import GameObject from '../engine/GameObject';
 import Sprite from '../engine/Sprite';
 
@@ -8,14 +14,13 @@ export default class Storage extends GameObject {
         this.sprite = new Sprite(document.getElementById('spr-barn'));
     }
     addResource(name, quantity, maxQuantity, tradable, cost) {
-        let _this = this;
         if (!this.storage.hasOwnProperty(name)) {
             this.storage[name] = {
-                name: name,
-                quantity: quantity,
-                maxQuantity: maxQuantity,
-                tradable: tradable,
-                cost: cost,
+                name: name,                 //Название ресурса
+                quantity: quantity,         //Количество ресура
+                maxQuantity: maxQuantity,   //Максимально количество, которое можно хранить
+                tradable: tradable,         //Можно ли его продать (золото, например, нельзя)
+                cost: cost,                 //Если можно продать, то за сколько
             };
         }
         return this.storage[name];
@@ -37,15 +42,19 @@ export default class Storage extends GameObject {
         return false;
     }
     sellItem(item, cost) {
-        if (this.removeItem(item)) {
-            if (this.addItem('Золото', cost)) {
-                this.game.logMessage(`Вы продали ${item} за ${cost} золота`);
+        if (this.storage[item].tradable) {
+            if (this.removeItem(item)) {
+                if (this.addItem('Золото', cost)) {
+                    this.game.logMessage(`Вы продали ${item} за ${cost} золота`);
+                } else {
+                    this.addItem(item);
+                    this.game.logMessage(`Недостаточно места на складе для золота`);
+                }
             } else {
-                this.addItem(item);
-                this.game.logMessage(`Недостаточно места на складе для золота`);
+                this.game.logMessage('Недостаточно ресурсов для продажи')
             }
         } else {
-            this.game.logMessage('Недостаточно ресурсов для продажи')
+            this.logMessage('Нельзя продать этот ресурс')
         }
     }
     makeInterface(storage) {
@@ -84,7 +93,6 @@ export default class Storage extends GameObject {
         return elements;
     }
     getInterface() {
-        let _this = this;
         return this.makeInterface(this.storage);
     }
 }

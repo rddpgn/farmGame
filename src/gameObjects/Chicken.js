@@ -2,8 +2,8 @@ import Entity from './Entity';
 import Sprite from '../engine/Sprite';
 
 export default class Chicken extends Entity {
-    constructor(x = 0, y = 0, length = 32, depth, game) {
-        super(x, y, length, depth, game);
+    constructor(x = 0, y = 0, length = 32, depth, game, cost) {
+        super(x, y, length, depth, game, cost);
 
         this.name = 'Курица';
         this.resource = 'Яйца';
@@ -23,16 +23,5 @@ export default class Chicken extends Entity {
     }
     static getEntityCost() {
         return 10;
-    }
-    reset() {
-        super.reset();
-        this.isFeed = false;
-    }
-    update() {
-        super.update();
-    }
-    growCompleted() {
-        super.growCompleted();
-        console.log('Chicken grew');
     }
 }

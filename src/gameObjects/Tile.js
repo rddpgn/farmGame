@@ -4,15 +4,18 @@ import Wheat from './Wheat';
 import Chicken from './Chicken';
 import Cow from './Cow';
 
+/* 
+    Участок поля, на котором можно что-то вырастить
+*/
 export default class Tile extends GameObject {
-    constructor(x, y, length, depth, game) {
+    constructor(x, y, length, depth, game, barn) {
         super(x, y, length, depth, game);
         this.sprite = new Sprite(document.getElementById('spr-grass'));
         this.sprite.frames = 2;
         this.sprite.maxCounter = 30 + Math.random() * 30;
-        this.entity = null;
-        this.type = 'tile';
-        this.barn = null;
+        this.entity = null; //То, что растет на нашем поле
+        this.barn = barn;   //Склад, на который мы будем складывать ресурсы сущности, которая
+                            //Растет на нашем поле
     }
     onMouseOver() {
         this.shape = {
@@ -44,8 +47,7 @@ export default class Tile extends GameObject {
         let cost = newEntity.getEntityCost();
         if (!this.entity) {
             if (this.barn.removeItem('Золото', cost)) {
-                this.entity = this.game.createGameObject(newEntity, this.x, this.y - 12, 50, 0);
-                this.entity.cost = cost;
+                this.entity = this.game.createGameObject(newEntity, this.x, this.y - 12, 50, 0, cost);
                 this.game.logMessage(`Вы построили ${this.entity.name}`);
             } else {
                 this.game.logMessage(`Недостаточно денег для постройки`)
@@ -104,7 +106,7 @@ export default class Tile extends GameObject {
         });
         arr.push({
             type: 'button',
-            text: `Собрать ресурс ${this.entity.resource} (+ ${this.entity.resourceAmount} ${this.entity.resource})`,
+            text: `Собрать ${this.entity.resource} (+ ${this.entity.resourceAmount} ${this.entity.resource})`,
             handler: _this.getResource.bind(_this),  
         });
         if (entity.foodAmount > 0) {

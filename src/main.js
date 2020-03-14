@@ -8,19 +8,21 @@ window.onload = function() {
   let ctx = canvas.getContext('2d');
 
   let gui = new GUI(document.getElementById('gameObject-gui'), document.getElementById('message-gui'));
-  let game = new Game(canvas, ctx, 650, 500, gui);
+  let game = new Game(canvas, ctx, 650, 500, gui, 3);
 
+  //Создание склада
   let barn = game.createGameObject(Storage, 500, 50, 100, 0);
 
-  barn.addResource('Пшеница', 0, 25, true, 2);
-  barn.addResource('Молоко', 0, 25, true, 10);
+  //Добавляем ресурсы на склад
+  barn.addResource('Пшеница', 0, 100, true, 2);
+  barn.addResource('Молоко', 0, 25, true, 3);
   barn.addResource('Яйца', 0, 25, true, 5);
-  barn.addResource('Золото', 100, 100, false);
+  barn.addResource('Золото', 0, 1000, false);
 
+  //Создание поля 8x8
   for(let n = 1; n <= 8; n++) {
     for(let m = 1; m <= 8; m++) {    
-      let tile = game.createGameObject(Tile, n * 50, m * 50, 50, 3);
-      tile.barn = barn;
+      game.createGameObject(Tile, n * 50, m * 50, 50, 3, barn);
     }
   }
 }

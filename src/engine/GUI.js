@@ -1,7 +1,14 @@
+/*
+    Все, что связанно с отрисовкой интерфейса, выполняет класс GUI
+*/
+
 export default class GUI {
     constructor(gameObjectInterfaceContainer = document.body, messageContainer) {
+        //html элемент, который выступает контейнером для интерфейса относительно объекта
         this.gameObjectInterfaceContainer = gameObjectInterfaceContainer;
+        //html элемент, для отрисовки строки сообщений
         this.messageContainer = messageContainer;
+
         this.drawGameObjectInterface();
         this.timer = setTimeout(0);
     }
@@ -16,7 +23,7 @@ export default class GUI {
                     this.gameObjectInterfaceContainer.appendChild(objInterface[i]);
                 }
             } else {
-                this.gameObjectInterfaceContainer.innerHTML = `Ребят, ну вы тут интерфейс проебали`;
+                this.gameObjectInterfaceContainer.innerHTML = `Здесь что-то должно быть написано`;
             }
         }
     }
@@ -57,7 +64,3 @@ export default class GUI {
         }, 4000);
     }
 }
-/*
-update -> gameObjectInterfaceUpdate
-parseInterface -> gameObjectInterfaceParse
-*/
