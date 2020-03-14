@@ -17,7 +17,7 @@ export default class Chicken extends Entity {
         }
 
         this.sprite.maxCounter = 20 + Math.random() * 20;
-        this.growTime = 600;
+        this.growTime = 500;
         this.isFeed = false;
         this.foodCycles = 3;
         this.foodAmount = 1;

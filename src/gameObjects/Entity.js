@@ -20,7 +20,7 @@ export default class Entity extends GameObject {
         this.food = 'Пшеница';      //Ресурс, которым нужно кормить сущность
         this.foodAmount = 0;        //Сколько нужно ресурса, чтобы прокормить
                                     //Если 0, то в кормлении не нуждается
-        this.foodCycles = 0;        //На сколько единиц производства ресурсов хватает еды
+        this.foodCycles = 1;        //На сколько циклов производства ресурсов хватает еды
         this.foodCyclesCounter = 0; 
 
         this.growTime = 0;          //Сколько игровых тиков должна расти сущность
